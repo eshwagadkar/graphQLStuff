@@ -1,12 +1,15 @@
 const express = require('express')
 const { createHandler } = require('graphql-http/lib/use/express')
 
-const schema = require('./schema/schema')
+require('dotenv').config()
+const PORT = process.env.PORT
 
 const app = express()
 
+const schema = require('./schema/schema')
+
 app.all('/graphql', createHandler({ schema }));
 
-app.listen(3000, () => {
-    console.log(`The port is up and running`)
+app.listen(PORT, () => {
+    console.log(`The server is up and running on port: ${PORT} `)
 })
