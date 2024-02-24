@@ -16,15 +16,26 @@ const RootQuery = new GraphQLObjectType({
     fields: () => ({
         // List all the songs
         songs: {
-            // type
+            type: new GraphQLList(SongType),
+            resolve() {
+                return Song.find({})
+            }
         },
         // List a particular song by id 
         song: {
-
+            type: SongType,
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+            resolve(parentValue, { id } ) {
+                return Song.findById(id)
+            }
         },
-        // List lyrics 
+        // List lyrics by id
         lyric: {
-
+            type: LyricType,
+            args: { id: { type: new GraphQLNonNull(GraphQLID) } },
+            resolve(parentValue, { id } ) {
+                return Lyric.findById(id)
+            }
         }
 
     })
