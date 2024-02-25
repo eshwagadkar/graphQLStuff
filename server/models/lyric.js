@@ -1,23 +1,21 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.schema
 
-const LyricSchema = new Schema({
+const LyricSchema = new mongoose.Schema({
     song: {
-        type: Schema.Types.ObjectId,
-        ref: 'song'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Song'
     },
     likes: { type: Number, default: 0 },
     content: { type: String }
 })
 
-LyricSchema.statics.like = function(id) {
-    const Lyric = mongoose.model('lyric') 
 
-    return Lyric.findById(id)
-        .then(lyric => {
-            ++lyric.likes;
-            return lyric.save()
-        })
+LyricSchema.statics.like = async function(id) {
+    const Lyric = mongoose.model('Lyric', LyricSchema) 
+    
+    const lyric = await Lyric.findById(id)
+    ++lyric.likes
+    return lyric.save()
 }
 
-mongoose.model('lyric', LyricSchema);
+module.exports = mongoose.model('Lyric', LyricSchema);
